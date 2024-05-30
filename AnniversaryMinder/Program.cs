@@ -75,13 +75,13 @@ namespace AnniversaryMinder
             if (ReadFile(SCHEMA_PATH, out string jsonSchema))
             {
                 // attempt to read sample json data into memory
-                if (ReadFile(SAMPLE_PATH, out string jsonData))
+                if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
                 {
                     // validate json data against schema
-                    if (ValidateAnniversaryJSON(jsonData, jsonSchema, out IList<string> messages))
+                    if (ValidateAnniversaryJSON(anniversaryJson, jsonSchema, out IList<string> messages))
                     {
                         // parse json data into a list of objects for user to interact with
-                        List<Anniversary> anniversaryList = DeserializeJSON(jsonData);
+                        List<Anniversary> anniversaryList = DeserializeJSON(anniversaryJson);
                         
 
                     }
