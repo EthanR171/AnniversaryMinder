@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "JSON Schema for an Anniversary",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "Names": {
+      "type": "string",
+      "description": "The name(s) of the celebrant(s) of an anniversary"
+    },
+    "AnniversaryDate": {
+      "type": "string",
+      "format": "date",
+      "description": "The original date of the anniversary event"
+    },
+    "AnniversaryType": {
+      "type": "string",
+      "enum": [ "birthday", "death", "graduation", "other" ],
+      "description": "Explains what type of anniversary it is"
+    },
+    "Description": {
+      "type": "string",
+      "description": "An optional description of the anniversary"
+    },
+    "Email": {
+      "type": "string",
+      "format": "email",
+      "description": "A single email address for the celebrant(s)"
+    },
+    "Phone": {
+      "type": "string",
+      "pattern": "^\\d{3}-\\d{3}-\\d{4}$",
+      "description": "A single phone number to contact the celebrants"
+    },
+    "Address": {
+      "type": "object",
+      "properties": {
+        "StreetAdress": {
+          "type": "string",
+          "description": "E.g. 130 Dundas St."
+        },
+        "Municipality": {
+          "type": "string",
+          "description": "E.g. London"
+        },
+        "Province": {
+          "type": "string",
+          "enum": [ "AB", "BC", "MN", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT" ],
+          "description": "A 2-character abbreviation for the province of residence"
+        },
+        "PostalCode": {
+          "type": "string",
+          "pattern": "^[A-Z][0-9][A-Z] [0-9][A-Z][0-9]$",
+          "description": "A Canadian postal code"
+        }
+      }
+    }
+  },
+  "required": ["Names", "AnniversaryDate", "AnniversaryType"]
+}
