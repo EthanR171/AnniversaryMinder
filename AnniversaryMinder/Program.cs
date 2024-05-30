@@ -150,53 +150,57 @@ namespace AnniversaryMinder
 
         static void Main(string[] args)
         {
-            bool isDone = false;  // tracks when user is finished with the program
-            string? userCommand; // stores what the user wants to do next 
-
             // attempt to read json schema into memory
             if (ReadFile(SCHEMA_PATH, out string anniversarySchema))
             {
-                // attempt to read sample json data into memory
-                if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
+                string? userCommand; // stores what the user wants to do next 
+                bool isDone = false;  // tracks when user is finished with the program
+                do
                 {
-                    // validate json data against schema
-                    if (ValidateAnniversaryJSON(anniversaryJson, anniversarySchema, out IList<string> messages))
+                    List<Anniversary> anniversaryList;
+
+                    // attempt to read sample json data into memory
+                    if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
                     {
-                        // parse json data into a list of objects for user to interact with
-                        List<Anniversary> anniversaryList = DeserializeJSON(anniversaryJson);
-                        do
+                        // validate json data against schema
+                        if (ValidateAnniversaryJSON(anniversaryJson, anniversarySchema, out IList<string> messages))
                         {
+                            // parse json data into a list of objects for user to interact with
+                            anniversaryList = DeserializeJSON(anniversaryJson);
                             GenerateHomePageWithExistingAnniversaries(anniversaryList);
-                            Console.Write("Enter a command: ");
-                            userCommand = GetUserInput();
-                            switch(userCommand)
-                            {
-                                case "x":
-                                    isDone = true;
-                                    break;
-                                default:
-                                    Console.Clear();
-                                    break;
-                            }
+                        }
+                        else // scenario for only the very first json sample ever read in the loop that does not follow schema rules
+                        {
+                            Console.WriteLine($"\nThe following validation errors occured....\n");
 
-                        } while (!isDone);
-        
+                            // Report validation error messages
+                            foreach (string msg in messages)
+                                Console.WriteLine($"\t{msg}");
+
+                            break;  // just stop the program since this would have been the uneditied sample read in initialy
+                           
+                        }
+
+                        // at this point, the anniversaryJson is determined to be in a valid state
+                        Console.Write("Enter a command: ");
+                        userCommand = GetUserInput();
+                        switch (userCommand)
+                        {
+                            case "x":
+                                isDone = true;
+                                break;
+                            default:
+                                Console.Clear();
+                                break;
+                        }
                     }
-                    else // json sample does not follow schema rules
+                    else // no sample json file exists
                     {
-                        Console.WriteLine($"\nERROR:\tData file is invalid.\n");
+                        // create an empty collection of anniversary objects for the user
+                        anniversaryList = new List<Anniversary>();
 
-                        // Report validation error messages
-                        foreach (string msg in messages)
-                            Console.WriteLine($"\t{msg}");
                     }
-                }
-                else // no sample json file exists
-                {
-                    // create an empty collection of anniversary objects for the user
-                    List<Anniversary> anniversaryList = new List<Anniversary>();
-                    
-                }
+                } while( !isDone ); // end of program loop
             }
             else // failed to read json schema
             {
