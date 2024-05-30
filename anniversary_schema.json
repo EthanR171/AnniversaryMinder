@@ -16,7 +16,7 @@
     },
     "AnniversaryType": {
       "type": "string",
-      "enum": [ "birthday", "death", "graduation", "other" ],
+      "pattern": "^(birthday|death|graduation|other)$",
       "description": "Explains what type of anniversary it is"
     },
     "Description": {
@@ -46,7 +46,7 @@
         },
         "Province": {
           "type": "string",
-          "enum": [ "AB", "BC", "MN", "NB", "NL", "NS", "NT", "NU", "ON", "PE", "QC", "SK", "YT" ],
+          "pattern": "^(AB|BC|MN|NB|NL|NS|NT|NU|ON|PE|QC|SK|YT)$",
           "description": "A 2-character abbreviation for the province of residence"
         },
         "PostalCode": {
