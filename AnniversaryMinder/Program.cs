@@ -30,22 +30,22 @@ namespace AnniversaryMinder
         // Validates the json data specified by the parameter 'jsonData' against the schema
         // 
         // Returns 'true' if valid or 'false' if invalid
-        // Also populates the out parameter 'messages' with validation error messages if invalid
-        private static bool ValidateAnniversaryJSON(string jsonData, string jsonSchema, out IList<string> messages)
+        // Also populates the out parameter 'validationErrorMessages' with object error messages if invalid
+        private static bool ValidateAnniversaryJSON(string jsonData, string jsonSchema, out IList<string> validationErrorMessages)
         {
             JSchema schema = JSchema.Parse(jsonSchema);
             JArray anniversaryArray = JArray.Parse(jsonData);
-            messages = new List<string>();
+            validationErrorMessages = new List<string>();
             bool isValid = true;
 
             foreach (JObject anniversary in anniversaryArray)
             {
-                if (!anniversary.IsValid(schema, out IList<string> annivMessages))
+                if (!anniversary.IsValid(schema, out IList<string> anniversaryObjectErrorMessages))
                 {
                     isValid = false;
-                    foreach (var msg in annivMessages)
+                    foreach (var msg in anniversaryObjectErrorMessages) 
                     {
-                        messages.Add(msg);
+                        validationErrorMessages.Add(msg);
                     }
                 }
             }
@@ -72,13 +72,13 @@ namespace AnniversaryMinder
         static void Main(string[] args)
         {
             // attempt to read json schema into memory
-            if (ReadFile(SCHEMA_PATH, out string jsonSchema))
+            if (ReadFile(SCHEMA_PATH, out string anniversarySchema))
             {
                 // attempt to read sample json data into memory
                 if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
                 {
                     // validate json data against schema
-                    if (ValidateAnniversaryJSON(anniversaryJson, jsonSchema, out IList<string> messages))
+                    if (ValidateAnniversaryJSON(anniversaryJson, anniversarySchema, out IList<string> messages))
                     {
                         // parse json data into a list of objects for user to interact with
                         List<Anniversary> anniversaryList = DeserializeJSON(anniversaryJson);
