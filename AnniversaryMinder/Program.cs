@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;          // JsonConvert class
 using Newtonsoft.Json.Schema;   // JSchema class 
-using Newtonsoft.Json.Linq;     // JObject class
+using Newtonsoft.Json.Linq;
+using System.Net.NetworkInformation;     // JObject class
 
 namespace AnniversaryMinder
 {
@@ -63,6 +64,7 @@ namespace AnniversaryMinder
             return Console.ReadLine();
         }
 
+
         // Displays All Aniversaries homepage assuming json existed
         public static void GenerateHomePageWithExistingAnniversaries(List<Anniversary> anniversaryList)
         {
@@ -86,6 +88,57 @@ namespace AnniversaryMinder
             LineOutput.WithText("  Press N to add a new anniversary.");
             LineOutput.WithText("  Press U to list upcoming anniversaries.");
             LineOutput.WithText("  Press X to quit.");
+            LineOutput.Full(LineOutput.LineType.Bottom);
+        }
+
+        public static void GenerateSelectedAnniversaryPage(List<Anniversary> anniversaryList, int index)
+        {
+            // throw an expection if index is larger than size of array later on...
+            Anniversary selectedAnniversary = anniversaryList[index];
+            string names = selectedAnniversary.Names;
+            string date = selectedAnniversary.AnniversaryDate.ToString("yyyy-MM-dd");
+            string type = selectedAnniversary.AnniversaryType;
+            string? desc = selectedAnniversary.Description ?? "";
+            string? email = selectedAnniversary.Email ?? "";
+            string? phone = selectedAnniversary.Phone ?? "";
+            Address? address = selectedAnniversary.Address;
+
+            // padding for first column of output lines
+            string outputLine1 = "  Names: ".PadRight(19);
+            string outputLine2 = "  Date: ".PadRight(19);
+            string outputLine3 = "  Type: ".PadRight(19);
+            string outputLine4 = "  Description: ".PadRight(19);
+            string outputLine5 = "  Email: ".PadRight(19);
+            string outputLine6 = "  Phone: ".PadRight(19);
+            string outputLine7 = "  Address: ".PadRight(19);
+            string outputLine8 = "".PadRight(19);
+
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithText("                   ANNIVERSARY MINDER ~ Selected Anniversary");
+            LineOutput.Full(LineOutput.LineType.Middle);
+
+            LineOutput.WithText($"{outputLine1}{names}");
+            LineOutput.WithText($"{outputLine2}{date}");
+            LineOutput.WithText($"{outputLine3}{type}");
+            LineOutput.WithText($"{outputLine4}{desc}");
+            LineOutput.WithText($"{outputLine5}{email}");
+            LineOutput.WithText($"{outputLine6}{phone}");
+
+            if (address != null)
+            {
+                LineOutput.WithText($"{outputLine7}{address.StreetAddress}");
+                LineOutput.WithText($"{outputLine8}{address.Municipality}  {address.Province} {address.PostalCode}");
+            }
+            else
+            {
+                LineOutput.WithText($"  Address: ");
+            }
+
+
+            LineOutput.Full(LineOutput.LineType.Middle);
+            LineOutput.WithText("  Press E to edit this anniversary.");
+            LineOutput.WithText("  Press D to delete this anniversary.");
+            LineOutput.WithText("  Press M to return to the main menu.");
             LineOutput.Full(LineOutput.LineType.Bottom);
         }
 
@@ -122,7 +175,7 @@ namespace AnniversaryMinder
                 if (!anniversary.IsValid(schema, out IList<string> anniversaryObjectErrorMessages))
                 {
                     isValid = false;
-                    foreach (var msg in anniversaryObjectErrorMessages) 
+                    foreach (var msg in anniversaryObjectErrorMessages)
                     {
                         validationErrorMessages.Add(msg);
                     }
@@ -144,7 +197,7 @@ namespace AnniversaryMinder
             catch (JsonException) // in theory, we should never end up here based on the null-coalescing operator above
             {
                 Console.WriteLine("\nERROR: Failed to convert data in JSON file to an Anniversary List");
-                return new List<Anniversary>(); 
+                return new List<Anniversary>();
             }
         }
 
@@ -157,7 +210,10 @@ namespace AnniversaryMinder
                 bool isDone = false;  // tracks when user is finished with the program
                 do
                 {
+                    Console.Clear();
                     List<Anniversary> anniversaryList;
+                    bool returnToMainMenu = false;
+                    bool expandAnniversary = false;
 
                     // attempt to read sample json data into memory
                     if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
@@ -178,20 +234,55 @@ namespace AnniversaryMinder
                                 Console.WriteLine($"\t{msg}");
 
                             break;  // just stop the program since this would have been the uneditied sample read in initialy
-                           
+
                         }
 
                         // at this point, the anniversaryJson is determined to be in a valid state
                         Console.Write("Enter a command: ");
                         userCommand = GetUserInput();
-                        switch (userCommand)
+
+                        bool isDigit = userCommand!.All(char.IsDigit); // flag to determine if user selected an anniversary
+                        if (isDigit)
                         {
-                            case "x":
-                                isDone = true;
-                                break;
-                            default:
+                            expandAnniversary = true;
+                        }
+                        else // if user is not looking to expand an anniversary they are looking to add, show upcoming or quit
+                        {
+
+                            switch (userCommand)
+                            {
+                                case "x":
+                                    isDone = true;
+                                    break;
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }
+                        }
+
+                        // handle menu homepage user input selection 
+                        if (expandAnniversary)
+                        {
+                            int selectedAnniversaryNumber = Convert.ToInt32(userCommand) - 1; // minus one to correctly index
+                            do
+                            {
+                                if (selectedAnniversaryNumber < 0 || selectedAnniversaryNumber >= anniversaryList.Count) // index was too large 
+                                {
+                                    returnToMainMenu = true;
+                                    break;
+                                }
                                 Console.Clear();
-                                break;
+                                GenerateSelectedAnniversaryPage(anniversaryList, selectedAnniversaryNumber);
+                                Console.Write("Enter command: ");
+                                userCommand = GetUserInput(); // at this point it should only be 'E' 'D' or 'M'
+                                switch (userCommand)
+                                {
+                                    case "m":
+                                        returnToMainMenu = true;
+                                        break;
+                                }
+
+                            } while (!returnToMainMenu); // selected anniversay loop
                         }
                     }
                     else // no sample json file exists
@@ -200,7 +291,7 @@ namespace AnniversaryMinder
                         anniversaryList = new List<Anniversary>();
 
                     }
-                } while( !isDone ); // end of program loop
+                } while (!isDone); // main menu loop 
             }
             else // failed to read json schema
             {
