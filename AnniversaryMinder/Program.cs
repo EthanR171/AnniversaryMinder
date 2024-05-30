@@ -4,11 +4,90 @@ using Newtonsoft.Json.Linq;     // JObject class
 
 namespace AnniversaryMinder
 {
+
+    internal class LineOutput
+    {
+        // Constants & variables for generating menu boxes
+        internal enum LineType { Top, Middle, Bottom };
+        internal const int Width = 80;
+        internal const char HorLine = '\u2500';
+        internal const char VerLine = '\u2502';
+        internal const char TopLeftL = '\u250C';
+        internal const char TopRightL = '\u2510';
+        internal const char TopT = '\u252C';
+        internal const char LeftT = '\u251C';
+        internal const char RightT = '\u2524';
+        internal const char BottomLeftL = '\u2514';
+        internal const char BottomRightL = '\u2518';
+
+        // Prints a continuous line
+        internal static void Full(LineType type, string appendText = "")
+        {
+            char left = TopLeftL, middle = HorLine, right = TopRightL;
+
+            if (type == LineType.Middle)
+            {
+                left = LeftT;
+                right = RightT;
+            }
+            else if (type == LineType.Bottom)
+            {
+                left = BottomLeftL;
+                right = BottomRightL;
+            }
+
+            Console.Write(left);
+            for (int i = 0; i < Width - 2; i++) Console.Write(middle);
+            Console.Write(right);
+            Console.WriteLine(appendText);
+        }
+
+        // Prints a line with text
+        internal static void WithText(string text)
+        {
+            Console.Write(VerLine);
+            Console.Write(text.PadRight(Width - 2));
+            Console.WriteLine(VerLine);
+        }
+    }
+
+
     class Program
     {
         // Constants
         public const string SCHEMA_PATH = "../../../../anniversary_schema.json";
         public const string SAMPLE_PATH = "../../../../anniversary.json";
+
+        public static string? GetUserInput()
+        {
+            return Console.ReadLine();
+        }
+
+        // Displays All Aniversaries homepage assuming json existed
+        public static void GenerateHomePageWithExistingAnniversaries(List<Anniversary> anniversaryList)
+        {
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithText("                   ANNIVERSARY MINDER ~ All Anniversaries");
+            LineOutput.Full(LineOutput.LineType.Middle);
+            LineOutput.WithText("  Name(s)                                       Date         Type");
+
+            LineOutput.Full(LineOutput.LineType.Middle);
+            for (int i = 0; i < anniversaryList.Count; i++)
+            {
+                // the paddings can be changed to alter the output if needed
+                string name = anniversaryList[i].Names.PadRight(43);
+                string date = anniversaryList[i].AnniversaryDate.ToString("yyyy-MM-dd").PadRight(13);
+                string type = anniversaryList[i].AnniversaryType.PadRight(10);
+
+                LineOutput.WithText($"  {i + 1}. {name}{date}{type}");
+            }
+            LineOutput.Full(LineOutput.LineType.Middle);
+            LineOutput.WithText("  Press # from the above list to select an entry.");
+            LineOutput.WithText("  Press N to add a new anniversary.");
+            LineOutput.WithText("  Press U to list upcoming anniversaries.");
+            LineOutput.WithText("  Press X to quit.");
+            LineOutput.Full(LineOutput.LineType.Bottom);
+        }
 
 
         // Attempts to read the json file specified by 'path' into the string 'json'
@@ -71,6 +150,9 @@ namespace AnniversaryMinder
 
         static void Main(string[] args)
         {
+            bool isDone = false;  // tracks when user is finished with the program
+            string? userCommand; // stores what the user wants to do next 
+
             // attempt to read json schema into memory
             if (ReadFile(SCHEMA_PATH, out string anniversarySchema))
             {
@@ -82,8 +164,23 @@ namespace AnniversaryMinder
                     {
                         // parse json data into a list of objects for user to interact with
                         List<Anniversary> anniversaryList = DeserializeJSON(anniversaryJson);
-                        
+                        do
+                        {
+                            GenerateHomePageWithExistingAnniversaries(anniversaryList);
+                            Console.Write("Enter a command: ");
+                            userCommand = GetUserInput();
+                            switch(userCommand)
+                            {
+                                case "x":
+                                    isDone = true;
+                                    break;
+                                default:
+                                    Console.Clear();
+                                    break;
+                            }
 
+                        } while (!isDone);
+        
                     }
                     else // json sample does not follow schema rules
                     {
