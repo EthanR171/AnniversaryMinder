@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7C751587-9D1B-44E7-8D5A-53780C32E0F3}"
 	ProjectSection(SolutionItems) = preProject
 		anniversary_schema.json = anniversary_schema.json
+		anniversary.json = anniversary.json
 	EndProjectSection
 EndProject
 Global
