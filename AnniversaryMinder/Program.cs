@@ -53,7 +53,8 @@ namespace AnniversaryMinder
             return isValid;
         } // end ValidateTeamData()
 
-        // either gives us a list populated list of anniversary objects or an empty one
+        // either gives us a populated list of anniversary objects or an empty one
+        // should only ever be invoked after ValidateAnniversaryJSON has been called
         private static List<Anniversary> DeserializeJSON(string jsonData)
         {
             try
