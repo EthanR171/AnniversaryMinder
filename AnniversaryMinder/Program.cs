@@ -167,6 +167,19 @@ namespace AnniversaryMinder
             }
         }
 
+        private static void WriteToFile(string path, string json)
+        {
+            try
+            {
+                File.WriteAllText(path, json);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"ERROR: Failed to write to the file. Details: {ex.Message}");
+            }
+        }
+
+
         // Validates the json data specified by the parameter 'jsonData' against the schema
         // 
         // Returns 'true' if valid or 'false' if invalid
@@ -316,9 +329,8 @@ namespace AnniversaryMinder
                                         if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
                                         {
                                             validEditedAnniversary = true;
-                                            // update the jsonfile
-
-                                     
+                                            // update the jsonfile 
+                                            WriteToFile(anniversaryJson, json_all);
                                         }
                                         else
                                         {
@@ -333,12 +345,13 @@ namespace AnniversaryMinder
                                         }
 
                                     } while (!validEditedAnniversary); // edit anniversary loop
-                                }
+                                } // end edit anniversary if-statement
 
+                                returnToMainMenu = true;
 
                             } while (!returnToMainMenu); // selected anniversay loop
-                        }
-                    }
+                        } // end expand anniversary option
+                    } // end read json file into memory
                     else // no sample json file exists
                     {
                         // create an empty collection of anniversary objects for the user
