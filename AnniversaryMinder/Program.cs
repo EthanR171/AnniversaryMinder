@@ -301,11 +301,19 @@ namespace AnniversaryMinder
                                     editAnniversary = false;
                                     do
                                     {
+                                        string? userEditInput;
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
 
                                         Console.WriteLine($"Name(s) \"{anniversaryList[selectedAnniversaryNumber].Names}\": ");
-                                        string? userEditInput = GetUserInput();
+                                        userEditInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userEditInput))
+                                        {
+                                            anniversaryList[selectedAnniversaryNumber].Names = userEditInput; //update anniversary
+                                        }
+
+                                        string json_all = JsonConvert.SerializeObject(anniversaryList);
+                                        
 
                                     } while (!validEditedAnniversary); // edit anniversary loop
 
