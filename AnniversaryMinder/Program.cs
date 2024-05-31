@@ -318,6 +318,10 @@ namespace AnniversaryMinder
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
 
+                                        /******************************************************************************************  
+                                         *                   UPDATE OBJECT PROPERTIES SECTION                                     *
+                                         ******************************************************************************************/
+
                                         Console.WriteLine($"Name(s) \"{anniversaryList[selectedAnniversaryNumber].Names}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
@@ -325,7 +329,7 @@ namespace AnniversaryMinder
                                             anniversaryList[selectedAnniversaryNumber].Names = userEditInput; //update anniversary
                                         }
 
-                                        // WORKING HERE: ADD OTHER FILEDS TO UPDATE
+                                        
                                         Console.WriteLine($"Anniversary Type \"{anniversaryList[selectedAnniversaryNumber].AnniversaryType}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
@@ -333,7 +337,9 @@ namespace AnniversaryMinder
                                             anniversaryList[selectedAnniversaryNumber].AnniversaryType = userEditInput; // update type 
                                         }
 
-                                        // when finished updating the selected anniversary, validate it
+                                        /******************************************************************************************  
+                                         *                   VALIDATE NEW JSON CREATED FROM USER EDITED OBJECT                    *
+                                         ******************************************************************************************/
                                         string json_all = JsonConvert.SerializeObject(anniversaryList);
                                         if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
                                         {
