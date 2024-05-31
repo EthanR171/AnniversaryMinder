@@ -330,7 +330,7 @@ namespace AnniversaryMinder
                                         {
                                             validEditedAnniversary = true;
                                             // update the jsonfile 
-                                            WriteToFile(anniversaryJson, json_all);
+                                            WriteToFile(SAMPLE_PATH, json_all);
                                         }
                                         else
                                         {
