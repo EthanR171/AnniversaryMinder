@@ -216,6 +216,7 @@ namespace AnniversaryMinder
                     bool expandAnniversary = false;
 
                     bool editAnniversary = false;
+                    bool validEditedAnniversary = false;
 
                     // attempt to read sample json data into memory
                     if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
@@ -285,6 +286,16 @@ namespace AnniversaryMinder
                                     case "m":
                                         returnToMainMenu = true;
                                         break;
+                                }
+
+                                if (editAnniversary) // user chose to edit an anniversary
+                                {
+                                    editAnniversary = false;
+                                    do
+                                    {
+                                     
+                                    } while (!validEditedAnniversary); // edit anniversary loop
+
                                 }
 
                             } while (!returnToMainMenu); // selected anniversay loop
