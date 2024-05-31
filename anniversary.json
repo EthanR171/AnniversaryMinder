@@ -30,11 +30,10 @@
     "Names": "Mono Poly",
     "AnniversaryDate": "2025-08-21",
     "AnniversaryType": "graduation",
-    "Description": " ",
     "Email": "iownboardwalk@example.com",
     "Phone": "416-123-4567",
     "Address": {
-      "StreetAddress": "787 Queen St.",
+      "StreetAddress": "789 Queen St.",
       "Municipality": "Ottawa",
       "Province": "ON",
       "PostalCode": "K1R 5A6"
@@ -42,16 +41,10 @@
   },
   {
     "Names": "Lin Dor",
-    "AnniversaryDate": "2024-06-21",
+    "AnniversaryDate": "2019-03-10",
     "AnniversaryType": "other",
-    "Description": "Celebrating being a human being!",
-    "Email": "notchocolate875@example.com",
-    "Address": {
-      "StreetAddress": "123 example st.",
-      "Municipality": "London",
-      "Province": "ON",
-      "PostalCode": "N6G 0N2"
-    }
+    "Description": "Celebrating being a human being",
+    "Email": "notchocolate875@example.com"
   },
   {
     "Names": "Sunny and Dark Disposition",
