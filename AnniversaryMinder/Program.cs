@@ -72,23 +72,31 @@ namespace AnniversaryMinder
 
 
         // Displays All Aniversaries homepage assuming json existed
-        public static void GenerateHomePageWithExistingAnniversaries(List<Anniversary> anniversaryList)
+        public static void GenerateHomePage(List<Anniversary> anniversaryList)
         {
             Console.Clear();
             LineOutput.Full(LineOutput.LineType.Top);
             LineOutput.WithText("                   ANNIVERSARY MINDER ~ All Anniversaries");
             LineOutput.Full(LineOutput.LineType.Middle);
             LineOutput.WithText("  Name(s)                                       Date         Type");
-
             LineOutput.Full(LineOutput.LineType.Middle);
-            for (int i = 0; i < anniversaryList.Count; i++)
-            {
-                // the paddings can be changed to alter the output if needed
-                string name = anniversaryList[i].Names.PadRight(43);
-                string date = anniversaryList[i].AnniversaryDate.PadRight(13);
-                string type = anniversaryList[i].AnniversaryType.PadRight(10);
 
-                LineOutput.WithText($"  {i + 1}. {name}{date}{type}");
+            if (anniversaryList.Count == 0)
+            {
+                LineOutput.WithText("  There are currently no saved anniversaries.");
+            }
+            else
+            {
+                
+                for (int i = 0; i < anniversaryList.Count; i++)
+                {
+                    // the paddings can be changed to alter the output if needed
+                    string name = anniversaryList[i].Names.PadRight(43);
+                    string date = anniversaryList[i].AnniversaryDate.PadRight(13);
+                    string type = anniversaryList[i].AnniversaryType.PadRight(10);
+
+                    LineOutput.WithText($"  {i + 1}. {name}{date}{type}");
+                }
             }
             LineOutput.Full(LineOutput.LineType.Middle);
             LineOutput.WithText("  Press # from the above list to select an entry.");
@@ -165,6 +173,14 @@ namespace AnniversaryMinder
             LineOutput.WithText("                   ANNIVERSARY MINDER ~ Add a New Anniversary");
             LineOutput.Full(LineOutput.LineType.Bottom);
             Console.WriteLine("Please key-in values for the following fields...\n");
+        }
+
+        public static void GenerateDeleteAnniversaryPage()
+        {
+            Console.Clear();
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithText("                   ANNIVERSARY MINDER ~ Delete Selected Anniversary");
+            LineOutput.Full(LineOutput.LineType.Bottom);
         }
 
 
@@ -252,7 +268,7 @@ namespace AnniversaryMinder
                     bool returnToMainMenu = false;
                     bool expandAnniversary = false;
                     bool addNew = false;
-
+                    bool deleteAnniversary = false;
                     bool editAnniversary = false;
                     bool validAnniversary = false;
 
@@ -264,7 +280,7 @@ namespace AnniversaryMinder
                         {
                             // parse json data into a list of objects for user to interact with
                             anniversaryList = DeserializeJSON(anniversaryJson);
-                            GenerateHomePageWithExistingAnniversaries(anniversaryList);
+                            GenerateHomePage(anniversaryList);
                         }
                         else // scenario for only the very first json sample ever read in the loop that does not follow schema rules
                         {
@@ -325,7 +341,7 @@ namespace AnniversaryMinder
                                 userAddInput = GetUserInput();
                                 if (!string.IsNullOrEmpty(userAddInput))
                                 {
-                                    anniversaryToAdd.Names = userAddInput; 
+                                    anniversaryToAdd.Names = userAddInput;
                                 }
 
                                 Console.Write("Anniversary Type:".PadRight(padding));
@@ -437,7 +453,7 @@ namespace AnniversaryMinder
                                     returnToMainMenu = true;
                                     break;
                                 }
-                               
+
                                 GenerateSelectedAnniversaryPage(anniversaryList, selectedAnniversaryNumber);
                                 Console.Write("Enter command: ");
                                 userCommand = GetUserInput(); // at this point it should only be 'E' 'D' or 'M'
@@ -452,11 +468,65 @@ namespace AnniversaryMinder
                                     case "e":
                                         editAnniversary = true;
                                         break;
+                                    case "d":
+                                        deleteAnniversary = true;
+                                        break;
                                     case "m":
                                         returnToMainMenu = true;
                                         break;
                                     default:
                                         continue; // re-display screen and prompt for user input
+                                }
+
+                                if (deleteAnniversary)
+                                {
+                                    bool goBackOnePage = false;
+                                    deleteAnniversary = false;
+                                    Anniversary anniversaryToDelete = anniversaryList[selectedAnniversaryNumber];
+                                    do
+                                    {
+                                        string? userDeleteInput; // y or n
+                                        GenerateDeleteAnniversaryPage();
+                                        Console.Write($"Delete \"{anniversaryToDelete.AnniversaryType}\" anniversary for \"{anniversaryToDelete.Names}\"? (Y/N): ");
+                                        userDeleteInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userDeleteInput))
+                                        {
+                                            switch (userDeleteInput.ToLower())
+                                            {
+                                                case "y":
+                                                    anniversaryList.Remove(anniversaryToDelete);
+                                                    string json_all = JsonConvert.SerializeObject(anniversaryList);
+                                                    if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
+                                                    {
+                                                        validAnniversary = true;
+                                                        // update the jsonfile 
+                                                        WriteToFile(SAMPLE_PATH, json_all);
+                                                    }
+                                                    else
+                                                    {
+                                                        Console.WriteLine($"\nThe following validation errors occured....\n");
+
+                                                        // Report validation error messages
+                                                        foreach (string msg in userEditedErrors)
+                                                            Console.WriteLine($"\t{msg}");
+
+                                                        Console.WriteLine("\nERROR: Invalid anniversary information entered. Press any key to make corrections.");
+                                                        Console.ReadLine();
+                                                    }
+                                                    returnToMainMenu = true;
+                                                    break;
+                                                case "n":
+                                                    goBackOnePage = true;
+                                                    break;
+                                            } // end switch
+                                        }
+                                        if (goBackOnePage)
+                                        {
+                                            goBackOnePage = false;
+                                            break;
+                                        }
+                                    } while (!validAnniversary);
+
                                 }
 
                                 if (editAnniversary) // user chose to edit an anniversary
@@ -469,7 +539,7 @@ namespace AnniversaryMinder
                                         bool createdAddress = false; // will be true the second user enters input that is not null or empty
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
-               
+
                                         /******************************************************************************************  
                                          *                   UPDATE OBJECT PROPERTIES SECTION                                     *
                                          ******************************************************************************************/
@@ -481,7 +551,7 @@ namespace AnniversaryMinder
                                             anniversaryList[selectedAnniversaryNumber].Names = userEditInput; //update anniversary
                                         }
 
-                                        
+
                                         Console.Write($"Anniversary Type \"{anniversaryList[selectedAnniversaryNumber].AnniversaryType}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
@@ -589,7 +659,7 @@ namespace AnniversaryMinder
                                                 anniversaryList[selectedAnniversaryNumber].Address = newAddress;
                                             }
                                         }
-                                       
+
                                         /******************************************************************************************  
                                          *                   VALIDATE NEW JSON CREATED FROM USER EDITED OBJECT                    *
                                          ******************************************************************************************/
@@ -614,19 +684,13 @@ namespace AnniversaryMinder
 
                                     } while (!validAnniversary); // edit anniversary loop
                                     validAnniversary = false; // reset it just incase
+                                    returnToMainMenu = true; // let the user go back to the homepage now
                                 } // end edit anniversary if-statement
-
-                                returnToMainMenu = true; // user finally entered correct data. lets go back to the home page now
 
                             } while (!returnToMainMenu); // selected anniversay loop
                         } // end expand anniversary option
                     } // end read json file into memory
-                    else // no sample json file exists
-                    {
-                        // create an empty collection of anniversary objects for the user
-                        anniversaryList = new List<Anniversary>();
-
-                    }
+                   
                 } while (!isDone); // main menu loop 
             }
             else // failed to read json schema
