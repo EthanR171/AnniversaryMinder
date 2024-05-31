@@ -316,7 +316,9 @@ namespace AnniversaryMinder
                                         if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
                                         {
                                             validEditedAnniversary = true;
-                                            // update the schema
+                                            // update the jsonfile
+
+                                     
                                         }
                                         else
                                         {
@@ -331,8 +333,8 @@ namespace AnniversaryMinder
                                         }
 
                                     } while (!validEditedAnniversary); // edit anniversary loop
-
                                 }
+
 
                             } while (!returnToMainMenu); // selected anniversay loop
                         }
