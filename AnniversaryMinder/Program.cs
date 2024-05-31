@@ -324,7 +324,10 @@ namespace AnniversaryMinder
                                         {
                                             anniversaryList[selectedAnniversaryNumber].Names = userEditInput; //update anniversary
                                         }
+                                        
+                                        // WORKING HERE: ADD OTHER FILEDS TO UPDATE
 
+                                        // when finished updating the selected anniversary, validate it
                                         string json_all = JsonConvert.SerializeObject(anniversaryList);
                                         if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
                                         {
