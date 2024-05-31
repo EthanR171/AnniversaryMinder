@@ -74,6 +74,7 @@ namespace AnniversaryMinder
         // Displays All Aniversaries homepage assuming json existed
         public static void GenerateHomePageWithExistingAnniversaries(List<Anniversary> anniversaryList)
         {
+            Console.Clear();
             LineOutput.Full(LineOutput.LineType.Top);
             LineOutput.WithText("                   ANNIVERSARY MINDER ~ All Anniversaries");
             LineOutput.Full(LineOutput.LineType.Middle);
@@ -99,7 +100,7 @@ namespace AnniversaryMinder
 
         public static void GenerateSelectedAnniversaryPage(List<Anniversary> anniversaryList, int index)
         {
-            // throw an expection if index is larger than size of array later on...
+            Console.Clear();
             Anniversary selectedAnniversary = anniversaryList[index];
             string names = selectedAnniversary.Names;
             string date = selectedAnniversary.AnniversaryDate;
@@ -150,6 +151,7 @@ namespace AnniversaryMinder
 
         public static void GenerateEditSelectedAnniversaryPage()
         {
+            Console.Clear();
             LineOutput.Full(LineOutput.LineType.Top);
             LineOutput.WithText("                   ANNIVERSARY MINDER ~ Edit Selected Anniversary");
             LineOutput.Full(LineOutput.LineType.Bottom);
@@ -246,7 +248,6 @@ namespace AnniversaryMinder
                 bool isDone = false;  // tracks when user is finished with the program
                 do
                 {
-                    Console.Clear();
                     List<Anniversary> anniversaryList;
                     bool returnToMainMenu = false;
                     bool expandAnniversary = false;
@@ -436,7 +437,7 @@ namespace AnniversaryMinder
                                     returnToMainMenu = true;
                                     break;
                                 }
-                                Console.Clear();
+                               
                                 GenerateSelectedAnniversaryPage(anniversaryList, selectedAnniversaryNumber);
                                 Console.Write("Enter command: ");
                                 userCommand = GetUserInput(); // at this point it should only be 'E' 'D' or 'M'
