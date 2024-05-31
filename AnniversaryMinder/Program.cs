@@ -416,7 +416,7 @@ namespace AnniversaryMinder
                                     foreach (string msg in userEditedErrors)
                                         Console.WriteLine($"\t{msg}");
 
-                                    Console.WriteLine("ERROR: Invalid anniversary information entered. Press any key to make corrections.");
+                                    Console.WriteLine("\nERROR: Invalid anniversary information entered. Press any key to make corrections.");
                                     Console.ReadLine();
                                 }
 
@@ -607,7 +607,7 @@ namespace AnniversaryMinder
                                             foreach (string msg in userEditedErrors)
                                                 Console.WriteLine($"\t{msg}");
 
-                                            Console.WriteLine("ERROR: Invalid anniversary information entered. Press any key to make corrections.");
+                                            Console.WriteLine("\nERROR: Invalid anniversary information entered. Press any key to make corrections.");
                                             Console.ReadLine();
                                         }
 
