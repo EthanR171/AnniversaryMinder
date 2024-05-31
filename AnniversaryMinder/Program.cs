@@ -24,6 +24,7 @@ namespace AnniversaryMinder
         // Prints a continuous line
         internal static void Full(LineType type, string appendText = "")
         {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             char left = TopLeftL, middle = HorLine, right = TopRightL;
 
             if (type == LineType.Middle)
@@ -41,14 +42,19 @@ namespace AnniversaryMinder
             for (int i = 0; i < Width - 2; i++) Console.Write(middle);
             Console.Write(right);
             Console.WriteLine(appendText);
+            Console.ResetColor();
         }
 
         // Prints a line with text
         internal static void WithText(string text)
         {
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write(VerLine);
+            Console.ResetColor();
             Console.Write(text.PadRight(Width - 2));
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine(VerLine);
+            Console.ResetColor();
         }
     }
 
