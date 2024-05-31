@@ -304,6 +304,8 @@ namespace AnniversaryMinder
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
 
+                                        Console.WriteLine($"Name(s) \"{anniversaryList[selectedAnniversaryNumber].Names}\": ");
+                                        string? userEditInput = GetUserInput();
 
                                     } while (!validEditedAnniversary); // edit anniversary loop
 
