@@ -156,6 +156,15 @@ namespace AnniversaryMinder
             Console.WriteLine("KEY-IN NEW values for any field, or PRESS ENTER to accept the current field value...\n");
         }
 
+        public static void GenerateAddNewAnniversaryPage()
+        {
+            Console.Clear();
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithText("                   ANNIVERSARY MINDER ~ Add a New Anniversary");
+            LineOutput.Full(LineOutput.LineType.Bottom);
+            Console.WriteLine("Please key-in values for the following fields...\n");
+        }
+
 
         // Attempts to read the json file specified by 'path' into the string 'json'
         // Returns 'true' if successful or 'false' if it fails
@@ -241,9 +250,10 @@ namespace AnniversaryMinder
                     List<Anniversary> anniversaryList;
                     bool returnToMainMenu = false;
                     bool expandAnniversary = false;
+                    bool addNew = false;
 
                     bool editAnniversary = false;
-                    bool validEditedAnniversary = false;
+                    bool validAnniversary = false;
 
                     // attempt to read sample json data into memory
                     if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
@@ -286,6 +296,9 @@ namespace AnniversaryMinder
 
                             switch (userCommand)
                             {
+                                case "n":
+                                    addNew = true;
+                                    break;
                                 case "x":
                                     isDone = true;
                                     break;
@@ -293,6 +306,123 @@ namespace AnniversaryMinder
                                     Console.Clear();
                                     break;
                             }
+                        }
+
+                        if (addNew)
+                        {
+                            addNew = false;
+                            do
+                            {
+                                GenerateAddNewAnniversaryPage();
+                                string? userAddInput;
+                                bool hasAddress = false;
+                                int padding = 20;
+                                Anniversary anniversaryToAdd = new Anniversary();
+                                Address addressToAdd = new Address();
+
+                                Console.Write("Name(s):".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.Names = userAddInput; 
+                                }
+
+                                Console.Write("Anniversary Type:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.AnniversaryType = userAddInput;
+                                }
+
+                                Console.Write("Description:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.Description = userAddInput;
+                                }
+
+                                Console.Write("Anniversary Date (yyyy-mm-dd):".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.AnniversaryDate = userAddInput;
+                                }
+
+                                Console.Write("Email:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.Email = userAddInput;
+                                }
+
+                                Console.Write("Phone #:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    anniversaryToAdd.Phone = userAddInput;
+                                }
+
+                                Console.Write("Street Address:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    hasAddress = true;
+                                    addressToAdd.StreetAddress = userAddInput;
+                                }
+
+                                Console.Write("Municipality:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    hasAddress = true;
+                                    addressToAdd.Municipality = userAddInput;
+                                }
+
+                                Console.Write("Province:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    hasAddress = true;
+                                    addressToAdd.Province = userAddInput;
+                                }
+
+                                Console.Write("PostalCode:".PadRight(padding));
+                                userAddInput = GetUserInput();
+                                if (!string.IsNullOrEmpty(userAddInput))
+                                {
+                                    hasAddress = true;
+                                    addressToAdd.PostalCode = userAddInput;
+                                }
+
+                                if (hasAddress)
+                                {
+                                    anniversaryToAdd.Address = addressToAdd;
+                                }
+
+                                anniversaryList.Add(anniversaryToAdd);
+                                string json_all = JsonConvert.SerializeObject(anniversaryList);
+                                if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
+                                {
+                                    validAnniversary = true;
+                                    // update the jsonfile 
+                                    WriteToFile(SAMPLE_PATH, json_all);
+                                }
+                                else
+                                {
+                                    anniversaryList.Remove(anniversaryToAdd);
+                                    Console.WriteLine($"\nThe following validation errors occured....\n");
+
+                                    // Report validation error messages
+                                    foreach (string msg in userEditedErrors)
+                                        Console.WriteLine($"\t{msg}");
+
+                                    Console.WriteLine("ERROR: Invalid anniversary information entered. Press any key to make corrections.");
+                                    Console.ReadLine();
+                                }
+
+
+                            } while (!validAnniversary);
+                            validAnniversary = false; // reset it just incase
                         }
 
                         // handle menu homepage user input selection 
@@ -465,7 +595,7 @@ namespace AnniversaryMinder
                                         string json_all = JsonConvert.SerializeObject(anniversaryList);
                                         if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
                                         {
-                                            validEditedAnniversary = true;
+                                            validAnniversary = true;
                                             // update the jsonfile 
                                             WriteToFile(SAMPLE_PATH, json_all);
                                         }
@@ -481,7 +611,8 @@ namespace AnniversaryMinder
                                             Console.ReadLine();
                                         }
 
-                                    } while (!validEditedAnniversary); // edit anniversary loop
+                                    } while (!validAnniversary); // edit anniversary loop
+                                    validAnniversary = false; // reset it just incase
                                 } // end edit anniversary if-statement
 
                                 returnToMainMenu = true; // user finally entered correct data. lets go back to the home page now
