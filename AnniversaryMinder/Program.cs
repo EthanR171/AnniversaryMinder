@@ -313,7 +313,22 @@ namespace AnniversaryMinder
                                         }
 
                                         string json_all = JsonConvert.SerializeObject(anniversaryList);
-                                        
+                                        if (ValidateAnniversaryJSON(json_all, anniversarySchema, out IList<string> userEditedErrors))
+                                        {
+                                            validEditedAnniversary = true;
+                                            // update the schema
+                                        }
+                                        else
+                                        {
+                                            Console.WriteLine($"\nThe following validation errors occured....\n");
+
+                                            // Report validation error messages
+                                            foreach (string msg in userEditedErrors)
+                                                Console.WriteLine($"\t{msg}");
+
+                                            Console.WriteLine("ERROR: Invalid anniversary information entered. Press any key to make corrections.");
+                                            Console.ReadLine();
+                                        }
 
                                     } while (!validEditedAnniversary); // edit anniversary loop
 
