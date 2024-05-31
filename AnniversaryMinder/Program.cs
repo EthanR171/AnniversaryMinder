@@ -215,6 +215,8 @@ namespace AnniversaryMinder
                     bool returnToMainMenu = false;
                     bool expandAnniversary = false;
 
+                    bool editAnniversary = false;
+
                     // attempt to read sample json data into memory
                     if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
                     {
