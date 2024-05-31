@@ -329,6 +329,7 @@ namespace AnniversaryMinder
                                     {
                                         string? userEditInput;
                                         bool hasAddress = anniversaryList[selectedAnniversaryNumber].Address != null;
+                                        bool createdAddress = false; // will be true the second user enters input that is not null or empty
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
                
@@ -418,6 +419,7 @@ namespace AnniversaryMinder
                                             userEditInput = GetUserInput();
                                             if (!string.IsNullOrEmpty(userEditInput))
                                             {
+                                                createdAddress = true;
                                                 newAddress.StreetAddress = userEditInput;
                                             }
 
@@ -425,6 +427,7 @@ namespace AnniversaryMinder
                                             userEditInput = GetUserInput();
                                             if (!string.IsNullOrEmpty(userEditInput))
                                             {
+                                                createdAddress = true;
                                                 newAddress.Municipality = userEditInput;
                                             }
 
@@ -432,6 +435,7 @@ namespace AnniversaryMinder
                                             userEditInput = GetUserInput();
                                             if (!string.IsNullOrEmpty(userEditInput))
                                             {
+                                                createdAddress = true;
                                                 newAddress.Province = userEditInput;
                                             }
 
@@ -439,10 +443,14 @@ namespace AnniversaryMinder
                                             userEditInput = GetUserInput();
                                             if (!string.IsNullOrEmpty(userEditInput))
                                             {
+                                                createdAddress = true;
                                                 newAddress.PostalCode = userEditInput;
                                             }
 
-                                            anniversaryList[selectedAnniversaryNumber].Address = newAddress;
+                                            if (createdAddress)
+                                            {
+                                                anniversaryList[selectedAnniversaryNumber].Address = newAddress;
+                                            }
                                         }
                                        
                                         /******************************************************************************************  
