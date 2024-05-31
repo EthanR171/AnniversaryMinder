@@ -265,6 +265,11 @@ namespace AnniversaryMinder
                         Console.Write("Enter a command: ");
                         userCommand = GetUserInput();
 
+                        if (string.IsNullOrEmpty(userCommand))
+                        {
+                            continue; // just re-display menu options and reprompt user
+                        }
+
                         bool isDigit = userCommand!.All(char.IsDigit); // flag to determine if user selected an anniversary
                         if (isDigit)
                         {
@@ -299,6 +304,12 @@ namespace AnniversaryMinder
                                 GenerateSelectedAnniversaryPage(anniversaryList, selectedAnniversaryNumber);
                                 Console.Write("Enter command: ");
                                 userCommand = GetUserInput(); // at this point it should only be 'E' 'D' or 'M'
+
+                                if (string.IsNullOrEmpty(userCommand))
+                                {
+                                    continue; // just re-display menu options and reprompt user
+                                }
+
                                 switch (userCommand)
                                 {
                                     case "e":
@@ -307,6 +318,8 @@ namespace AnniversaryMinder
                                     case "m":
                                         returnToMainMenu = true;
                                         break;
+                                    default:
+                                        continue; // re-display screen and prompt for user input
                                 }
 
                                 if (editAnniversary) // user chose to edit an anniversary
@@ -322,7 +335,7 @@ namespace AnniversaryMinder
                                          *                   UPDATE OBJECT PROPERTIES SECTION                                     *
                                          ******************************************************************************************/
 
-                                        Console.WriteLine($"Name(s) \"{anniversaryList[selectedAnniversaryNumber].Names}\": ");
+                                        Console.Write($"Name(s) \"{anniversaryList[selectedAnniversaryNumber].Names}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
@@ -330,21 +343,21 @@ namespace AnniversaryMinder
                                         }
 
                                         
-                                        Console.WriteLine($"Anniversary Type \"{anniversaryList[selectedAnniversaryNumber].AnniversaryType}\": ");
+                                        Console.Write($"Anniversary Type \"{anniversaryList[selectedAnniversaryNumber].AnniversaryType}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
                                             anniversaryList[selectedAnniversaryNumber].AnniversaryType = userEditInput; // update type 
                                         }
 
-                                        Console.WriteLine($"Description \"{anniversaryList[selectedAnniversaryNumber].Description}\": ");
+                                        Console.Write($"Description \"{anniversaryList[selectedAnniversaryNumber].Description}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
                                             anniversaryList[selectedAnniversaryNumber].Description = userEditInput; // update type 
                                         }
 
-                                        Console.WriteLine($"Anniversary Date \"{anniversaryList[selectedAnniversaryNumber].AnniversaryDate}\": ");
+                                        Console.Write($"Anniversary Date (yyyy-mm-dd) \"{anniversaryList[selectedAnniversaryNumber].AnniversaryDate}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
