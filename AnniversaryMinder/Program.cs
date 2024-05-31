@@ -78,7 +78,7 @@ namespace AnniversaryMinder
             {
                 // the paddings can be changed to alter the output if needed
                 string name = anniversaryList[i].Names.PadRight(43);
-                string date = anniversaryList[i].AnniversaryDate.ToString("yyyy-MM-dd").PadRight(13);
+                string date = anniversaryList[i].AnniversaryDate.PadRight(13);
                 string type = anniversaryList[i].AnniversaryType.PadRight(10);
 
                 LineOutput.WithText($"  {i + 1}. {name}{date}{type}");
@@ -96,7 +96,7 @@ namespace AnniversaryMinder
             // throw an expection if index is larger than size of array later on...
             Anniversary selectedAnniversary = anniversaryList[index];
             string names = selectedAnniversary.Names;
-            string date = selectedAnniversary.AnniversaryDate.ToString("yyyy-MM-dd");
+            string date = selectedAnniversary.AnniversaryDate;
             string type = selectedAnniversary.AnniversaryType;
             string? desc = selectedAnniversary.Description ?? "";
             string? email = selectedAnniversary.Email ?? "";
@@ -337,6 +337,20 @@ namespace AnniversaryMinder
                                             anniversaryList[selectedAnniversaryNumber].AnniversaryType = userEditInput; // update type 
                                         }
 
+                                        Console.WriteLine($"Description \"{anniversaryList[selectedAnniversaryNumber].Description}\": ");
+                                        userEditInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userEditInput))
+                                        {
+                                            anniversaryList[selectedAnniversaryNumber].Description = userEditInput; // update type 
+                                        }
+
+                                        Console.WriteLine($"Anniversary Date \"{anniversaryList[selectedAnniversaryNumber].AnniversaryDate}\": ");
+                                        userEditInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userEditInput))
+                                        {
+                                            anniversaryList[selectedAnniversaryNumber].AnniversaryDate = userEditInput; // update type 
+                                        }
+
                                         /******************************************************************************************  
                                          *                   VALIDATE NEW JSON CREATED FROM USER EDITED OBJECT                    *
                                          ******************************************************************************************/
@@ -362,7 +376,7 @@ namespace AnniversaryMinder
                                     } while (!validEditedAnniversary); // edit anniversary loop
                                 } // end edit anniversary if-statement
 
-                                returnToMainMenu = true;
+                                returnToMainMenu = true; // user finally entered correct data. lets go back to the home page now
 
                             } while (!returnToMainMenu); // selected anniversay loop
                         } // end expand anniversary option

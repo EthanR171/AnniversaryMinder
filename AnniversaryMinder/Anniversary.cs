@@ -29,7 +29,7 @@ namespace AnniversaryMinder
         public string Names { get; set; } = "";
 
         [Required]
-        public DateOnly AnniversaryDate { get; set; }
+        public string AnniversaryDate { get; set; } = "";
 
         [Required]
         public string AnniversaryType { get; set; } = "";
