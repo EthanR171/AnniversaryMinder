@@ -279,6 +279,9 @@ namespace AnniversaryMinder
                                 userCommand = GetUserInput(); // at this point it should only be 'E' 'D' or 'M'
                                 switch (userCommand)
                                 {
+                                    case "e":
+                                        editAnniversary = true;
+                                        break;
                                     case "m":
                                         returnToMainMenu = true;
                                         break;
