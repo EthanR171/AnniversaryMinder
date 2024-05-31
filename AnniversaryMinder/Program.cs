@@ -317,7 +317,7 @@ namespace AnniversaryMinder
                                 GenerateAddNewAnniversaryPage();
                                 string? userAddInput;
                                 bool hasAddress = false;
-                                int padding = 20;
+                                int padding = 35;
                                 Anniversary anniversaryToAdd = new Anniversary();
                                 Address addressToAdd = new Address();
 
