@@ -72,7 +72,7 @@ namespace AnniversaryMinder
 
 
         // Displays All Aniversaries homepage assuming json existed
-        public static void GenerateHomePageWithExistingAnniversaries(List<Anniversary> anniversaryList)
+        public static void GenerateHomePage(List<Anniversary> anniversaryList)
         {
             Console.Clear();
             LineOutput.Full(LineOutput.LineType.Top);
@@ -280,7 +280,7 @@ namespace AnniversaryMinder
                         {
                             // parse json data into a list of objects for user to interact with
                             anniversaryList = DeserializeJSON(anniversaryJson);
-                            GenerateHomePageWithExistingAnniversaries(anniversaryList);
+                            GenerateHomePage(anniversaryList);
                         }
                         else // scenario for only the very first json sample ever read in the loop that does not follow schema rules
                         {
