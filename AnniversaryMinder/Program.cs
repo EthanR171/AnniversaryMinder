@@ -295,7 +295,7 @@ namespace AnniversaryMinder
                         else // if user is not looking to expand an anniversary they are looking to add, show upcoming or quit
                         {
 
-                            switch (userCommand)
+                            switch (userCommand.ToLower())
                             {
                                 case "n":
                                     addNew = true;
@@ -447,7 +447,7 @@ namespace AnniversaryMinder
                                     continue; // just re-display menu options and reprompt user
                                 }
 
-                                switch (userCommand)
+                                switch (userCommand.ToLower())
                                 {
                                     case "e":
                                         editAnniversary = true;
