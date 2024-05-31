@@ -328,9 +328,10 @@ namespace AnniversaryMinder
                                     do
                                     {
                                         string? userEditInput;
+                                        bool hasAddress = anniversaryList[selectedAnniversaryNumber].Address != null;
                                         Console.Clear();
                                         GenerateEditSelectedAnniversaryPage();
-
+               
                                         /******************************************************************************************  
                                          *                   UPDATE OBJECT PROPERTIES SECTION                                     *
                                          ******************************************************************************************/
@@ -354,16 +355,96 @@ namespace AnniversaryMinder
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
-                                            anniversaryList[selectedAnniversaryNumber].Description = userEditInput; // update type 
+                                            anniversaryList[selectedAnniversaryNumber].Description = userEditInput; // update desc 
                                         }
 
                                         Console.Write($"Anniversary Date (yyyy-mm-dd) \"{anniversaryList[selectedAnniversaryNumber].AnniversaryDate}\": ");
                                         userEditInput = GetUserInput();
                                         if (!string.IsNullOrEmpty(userEditInput))
                                         {
-                                            anniversaryList[selectedAnniversaryNumber].AnniversaryDate = userEditInput; // update type 
+                                            anniversaryList[selectedAnniversaryNumber].AnniversaryDate = userEditInput; // update date
                                         }
 
+                                        Console.Write($"Email \"{anniversaryList[selectedAnniversaryNumber].Email}\": ");
+                                        userEditInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userEditInput))
+                                        {
+                                            anniversaryList[selectedAnniversaryNumber].Email = userEditInput; // update email 
+                                        }
+
+                                        Console.Write($"Phone # \"{anniversaryList[selectedAnniversaryNumber].Phone}\": ");
+                                        userEditInput = GetUserInput();
+                                        if (!string.IsNullOrEmpty(userEditInput))
+                                        {
+                                            anniversaryList[selectedAnniversaryNumber].Phone = userEditInput; // update phone 
+                                        }
+
+
+                                        if (hasAddress)
+                                        {
+                                            Console.Write($"Street Address \"{anniversaryList[selectedAnniversaryNumber].Address!.StreetAddress}\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                anniversaryList[selectedAnniversaryNumber].Address!.StreetAddress = userEditInput; // update street 
+                                            }
+
+                                            Console.Write($"Municipality \"{anniversaryList[selectedAnniversaryNumber].Address!.Municipality}\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                anniversaryList[selectedAnniversaryNumber].Address!.Municipality = userEditInput; // update municipality 
+                                            }
+
+                                            Console.Write($"Province \"{anniversaryList[selectedAnniversaryNumber].Address!.Province}\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                anniversaryList[selectedAnniversaryNumber].Address!.Province = userEditInput; // update province 
+                                            }
+
+                                            Console.Write($"PostalCode \"{anniversaryList[selectedAnniversaryNumber].Address!.PostalCode}\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                anniversaryList[selectedAnniversaryNumber].Address!.PostalCode = userEditInput; // update postal code 
+                                            }
+                                        }
+                                        else // no address field so if user input isn't null, create the Address object for the Anniversary
+                                        {
+                                            Address newAddress = new Address();
+
+                                            Console.Write($"Street Address \"\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                newAddress.StreetAddress = userEditInput;
+                                            }
+
+                                            Console.Write($"Municipality \"\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                newAddress.Municipality = userEditInput;
+                                            }
+
+                                            Console.Write($"Province \"\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                newAddress.Province = userEditInput;
+                                            }
+
+                                            Console.Write($"PostalCode \"\": ");
+                                            userEditInput = GetUserInput();
+                                            if (!string.IsNullOrEmpty(userEditInput))
+                                            {
+                                                newAddress.PostalCode = userEditInput;
+                                            }
+
+                                            anniversaryList[selectedAnniversaryNumber].Address = newAddress;
+                                        }
+                                       
                                         /******************************************************************************************  
                                          *                   VALIDATE NEW JSON CREATED FROM USER EDITED OBJECT                    *
                                          ******************************************************************************************/
