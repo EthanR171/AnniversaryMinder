@@ -142,6 +142,14 @@ namespace AnniversaryMinder
             LineOutput.Full(LineOutput.LineType.Bottom);
         }
 
+        public static void GenerateEditSelectedAnniversaryPage()
+        {
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithText("                   ANNIVERSARY MINDER ~ Edit Selected Anniversary");
+            LineOutput.Full(LineOutput.LineType.Bottom);
+            Console.WriteLine("KEY-IN NEW values for any field, or PRESS ENTER to accept the current field value...\n");
+        }
+
 
         // Attempts to read the json file specified by 'path' into the string 'json'
         // Returns 'true' if successful or 'false' if it fails
@@ -293,7 +301,10 @@ namespace AnniversaryMinder
                                     editAnniversary = false;
                                     do
                                     {
-                                     
+                                        Console.Clear();
+                                        GenerateEditSelectedAnniversaryPage();
+
+
                                     } while (!validEditedAnniversary); // edit anniversary loop
 
                                 }
