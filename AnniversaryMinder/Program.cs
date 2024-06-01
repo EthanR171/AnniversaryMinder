@@ -63,7 +63,7 @@ namespace AnniversaryMinder
     {
         // Constants
         public const string SCHEMA_PATH = "../../../../anniversary_schema.json";
-        public const string SAMPLE_PATH = "../../../../anniversary.json";
+        public const string SAMPLE_PATH = "../../../../anniversary.json"; // if no file existed this will be used as default
 
         public static string? GetUserInput()
         {
@@ -271,6 +271,12 @@ namespace AnniversaryMinder
                     bool deleteAnniversary = false;
                     bool editAnniversary = false;
                     bool validAnniversary = false;
+
+                    // ensure file even exists before continuing. create it if needed
+                    if (!File.Exists(SAMPLE_PATH))
+                    {
+                        File.WriteAllText(SAMPLE_PATH, "[]"); // fill it with garbage for now 
+                    }
 
                     // attempt to read sample json data into memory
                     if (ReadFile(SAMPLE_PATH, out string anniversaryJson))
@@ -690,7 +696,7 @@ namespace AnniversaryMinder
                             } while (!returnToMainMenu); // selected anniversay loop
                         } // end expand anniversary option
                     } // end read json file into memory
-                   
+
                 } while (!isDone); // main menu loop 
             }
             else // failed to read json schema
