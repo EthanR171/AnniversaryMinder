@@ -1,7 +1,7 @@
 [
   {
     "Names": "Nickle and Dime",
-    "AnniversaryDate": "2024-09-30",
+    "AnniversaryDate": "2024-06-14",
     "AnniversaryType": "birthday",
     "Description": "Celebrating shared 50th birthday",
     "Email": "nickleanddime@example.com",
@@ -41,14 +41,14 @@
   },
   {
     "Names": "Lin Dor",
-    "AnniversaryDate": "2019-03-10",
+    "AnniversaryDate": "2016-06-10",
     "AnniversaryType": "other",
     "Description": "Celebrating being a human being",
     "Email": "notchocolate875@example.com"
   },
   {
     "Names": "Penny Pincher",
-    "AnniversaryDate": "2026-12-25",
+    "AnniversaryDate": "2023-06-13",
     "AnniversaryType": "birthday",
     "Phone": "905-555-6666"
   }
