@@ -56,6 +56,38 @@ namespace AnniversaryMinder
             Console.WriteLine(VerLine);
             Console.ResetColor();
         }
+
+        // only used for show upcoming anniversaries title. dont use elsewhere!
+        internal static void WithTwoColorText(string text1,string text2)
+        {
+            int totalWidth = Width - 2;
+            int combinedTextLength = text1.Length + text2.Length;
+
+            // Print the first part with original color
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write(VerLine);
+            Console.ResetColor();
+
+            // Print text1 part
+            Console.Write(text1);
+
+            // Print text2 part with new color
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write(text2);
+            Console.ResetColor();
+
+            // Fill the rest of the line with spaces if needed
+            int remainingSpace = totalWidth - combinedTextLength;
+            if (remainingSpace > 0)
+            {
+                Console.Write(new string(' ', remainingSpace));
+            }
+
+            // Print the closing vertical line
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine(VerLine);
+            Console.ResetColor();
+        }
     }
 
 
@@ -183,6 +215,63 @@ namespace AnniversaryMinder
             LineOutput.Full(LineOutput.LineType.Bottom);
         }
 
+        public static void GenerateUpcomingAnniversaryPage(List<Anniversary> anniversaryList)
+        {
+            Console.Clear();
+            LineOutput.Full(LineOutput.LineType.Top);
+            LineOutput.WithTwoColorText("      ANNIVERSARY MINDER ~ ", "Anniversaries Happening In The Next Two Weeks");
+            LineOutput.Full(LineOutput.LineType.Middle);
+            LineOutput.WithText("  Name(s)                                  Date         Type            Years");
+            LineOutput.Full(LineOutput.LineType.Middle);
+
+            DateTime today = DateTime.Today;
+            DateTime twoWeeksFromToday = today.AddDays(14);
+
+            
+            var upcomingAnniversaries = new List<Anniversary>();
+            foreach (Anniversary a in anniversaryList)
+            {
+                if (DateTime.TryParse(a.AnniversaryDate, out DateTime anniversaryDate))
+                {
+                    // Ensure we are considering only current and past dates for the month and day
+                    if (anniversaryDate.Year <= today.Year)
+                    {
+                        // Check if the month and day of the anniversary date fall within the next two weeks
+                        if ((anniversaryDate.Month == today.Month && anniversaryDate.Day >= today.Day) ||
+                            (anniversaryDate.Month == twoWeeksFromToday.Month && anniversaryDate.Day <= twoWeeksFromToday.Day))
+                        {
+                            upcomingAnniversaries.Add(a);
+                        }
+                    }
+                }
+            }
+
+            if (upcomingAnniversaries.Count == 0)
+            {
+                LineOutput.WithText("  There are no upcoming anniversaries in the next two weeks.");
+            }
+            else
+            {
+                foreach (var anniversary in upcomingAnniversaries)
+                {
+                    string name = anniversary.Names.PadRight(41);
+                    string date = anniversary.AnniversaryDate.PadRight(13);
+                    string type = anniversary.AnniversaryType.PadRight(16);
+                    int years = today.Year - DateTime.Parse(anniversary.AnniversaryDate).Year;
+                    string yearsStr = years.ToString().PadRight(6);
+
+                    LineOutput.WithText($"  {name}{date}{type}{yearsStr}");
+                }
+            }
+
+
+            LineOutput.Full(LineOutput.LineType.Bottom);
+            Console.WriteLine("\nPress any key to return to the main menu.");
+            
+
+            Console.ReadKey();
+        }
+
 
         // Attempts to read the json file specified by 'path' into the string 'json'
         // Returns 'true' if successful or 'false' if it fails
@@ -268,6 +357,7 @@ namespace AnniversaryMinder
                     bool returnToMainMenu = false;
                     bool expandAnniversary = false;
                     bool addNew = false;
+                    bool showUpcoming = false;
                     bool deleteAnniversary = false;
                     bool editAnniversary = false;
                     bool validAnniversary = false;
@@ -321,6 +411,9 @@ namespace AnniversaryMinder
                             {
                                 case "n":
                                     addNew = true;
+                                    break;
+                                case "u":
+                                    showUpcoming = true;
                                     break;
                                 case "x":
                                     isDone = true;
@@ -446,6 +539,16 @@ namespace AnniversaryMinder
 
                             } while (!validAnniversary);
                             validAnniversary = false; // reset it just incase
+                        }
+
+                        //handle show upcoming request
+                        if (showUpcoming)
+                        {
+                            do
+                            {
+                                GenerateUpcomingAnniversaryPage(anniversaryList);
+                                returnToMainMenu = true;
+                            } while (!returnToMainMenu);
                         }
 
                         // handle menu homepage user input selection 
