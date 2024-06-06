@@ -233,12 +233,16 @@ namespace AnniversaryMinder
             {
                 if (DateTime.TryParse(a.AnniversaryDate, out DateTime anniversaryDate))
                 {
-                    // Ensure we are considering only current and past dates for the month and day
+                    // ensure we are considering only current and past dates for the month and day
                     if (anniversaryDate.Year <= today.Year)
                     {
-                        // Check if the month and day of the anniversary date fall within the next two weeks
-                        if ((anniversaryDate.Month == today.Month && anniversaryDate.Day >= today.Day) ||
-                            (anniversaryDate.Month == twoWeeksFromToday.Month && anniversaryDate.Day <= twoWeeksFromToday.Day))
+                        // check if the month and day of the anniversary date fall within the next two weeks
+                        // just adjust the year of the anniversary date to todays year since we only care 
+                        // about the month and day at this point
+                        DateTime adjustedDate = new DateTime(today.Year, anniversaryDate.Month, anniversaryDate.Day);
+
+                        // Check if the adjusted date falls within the next two weeks
+                        if (adjustedDate >= today && adjustedDate <= twoWeeksFromToday)
                         {
                             upcomingAnniversaries.Add(a);
                         }
@@ -248,7 +252,7 @@ namespace AnniversaryMinder
 
             if (upcomingAnniversaries.Count == 0)
             {
-                LineOutput.WithText("  There are no upcoming anniversaries in the next two weeks.");
+                LineOutput.WithText("There are no upcoming anniversaries in the next two weeks.");
             }
             else
             {
