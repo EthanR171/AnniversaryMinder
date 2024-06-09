@@ -1,4 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿/****************************************************
+ * Program Name: Anniversary.cs
+ * Author(s): Ethan Rivers, Jefferson Gilbert
+ * Date: June 2, 2024
+ * Description: Class definitions for Anniversary and Address objects
+ * Version: 1.0
+ ****************************************************/
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
