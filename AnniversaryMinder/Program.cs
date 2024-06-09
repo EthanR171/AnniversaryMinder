@@ -1,6 +1,6 @@
 ﻿/****************************************************
  * Program Name: Program.cs
- * Author(s): Ethan Rivers, Jefferson Gilbert
+ * Author(s): Ethan Rivers
  * Date: June 2, 2024
  * Description: Anniversary Tracker Program for INF03136
  * Version: 1.0

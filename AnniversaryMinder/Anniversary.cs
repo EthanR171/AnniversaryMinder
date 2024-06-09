@@ -1,6 +1,6 @@
 ﻿/****************************************************
  * Program Name: Anniversary.cs
- * Author(s): Ethan Rivers, Jefferson Gilbert
+ * Author(s): Ethan Rivers
  * Date: June 2, 2024
  * Description: Class definitions for Anniversary and Address objects
  * Version: 1.0
