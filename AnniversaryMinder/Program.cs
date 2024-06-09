@@ -1,7 +1,14 @@
-﻿using Newtonsoft.Json;          // JsonConvert class
+﻿/****************************************************
+ * Program Name: Program.cs
+ * Author(s): Ethan Rivers, Jefferson Gilbert
+ * Date: June 2, 2024
+ * Description: Anniversary Tracker Program for INF03136
+ * Version: 1.0
+ ****************************************************/
+using Newtonsoft.Json;          // JsonConvert class
 using Newtonsoft.Json.Schema;   // JSchema class 
-using Newtonsoft.Json.Linq;
-using System.Net.NetworkInformation;     // JObject class
+using Newtonsoft.Json.Linq;     // JObject class
+using System.Net.NetworkInformation;     
 
 namespace AnniversaryMinder
 {
